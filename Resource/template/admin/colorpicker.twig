@@ -9,6 +9,7 @@ $(function () {
 });
 </script>
 {% for ClassCategory in ClassCategories %}
+{% if forms[ClassCategory.id].vars.value.color_thumb_hex %}
 <div class="colorpicker" data-id="{{ClassCategory.id}}">
     <div class="col-auto align-self-center"><span>{{ 'admin.product.class_category__color_thumb_hex'|trans }}</span></div>
     <div class="col-auto align-items-center">
@@ -16,4 +17,5 @@ $(function () {
         {{ form_errors(forms[ClassCategory.id].color_thumb_hex) }}
     </div>
 </div>
+{% endif %}
 {% endfor %}

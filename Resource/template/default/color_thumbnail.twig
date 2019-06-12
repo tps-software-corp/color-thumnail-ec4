@@ -1,0 +1,79 @@
+{% set size = 50 %}
+{% set border_color = '000' %}
+{% set border_line = 1 %}
+{% set border_radius = 50 %}
+{% set border_line_hover = 3 %}
+{% set border_color_hover = 'fff' %}
+{% set border_color_active = '4dd3d9' %}
+<style>
+.color-thumb {
+    width: {{size}}px;
+    height: {{size}}px;
+    border: {{border_line}}px solid #{{border_color}};
+    border-radius: {{border_radius}}px;
+    float: left;
+    margin-right: 5px;
+}
+.color-thumb:hover {
+    border: {{border_line_hover}}px solid #{{border_color_hover}};
+    cursor: pointer;
+}
+.color-thumb.active,
+.color-thumb:hover.active {
+    border: {{border_line_hover}}px solid #{{border_color_active}};
+}
+.c-thumnail {
+    padding: 10px 0;
+    padding-top: 0;
+    margin: 10px 0;
+    border-bottom: 1px dotted #ccc;
+}
+</style>
+<script>
+$(function() {
+    $('.ec-productRole__actions').prepend($('.color-thumnail').html());
+    var remover = $('#class-cat-config').data('remove-name');
+    $('#' + remover).parent().hide();
+    $('.color-thumb').off('click');
+    $('.color-thumb').on('click', function() {
+        $('.color-thumb').removeClass('active');
+        $(this).addClass('active');
+        $('#color-selected').html($(this).data('label'));
+        $('#' + remover).val($(this).data('value'));
+        $('[name="ProductClass"]').val($(this).data('p-class'));
+    });
+    $('.color-thumb:first-child').trigger('click');
+    $('.color-thumb:first-child').addClass('active');
+})
+</script>
+
+<div class="color-thumnail">
+{% if Product.stock_find %}
+    <div class="c-thumnail">
+        <div class="">
+            <p class="help-block">{{'color_thumb.front.select_your_color' | trans}}: <span id="color-selected"></span></p>
+        </div>
+        <div class="">
+        {% set name = null %}
+        {% for pClass in Product.ProductClasses %}
+            {% set ClassCategory = null %}
+            {% if pClass.ClassCategory1.color_thumb_hex is defined %}
+                {% set ClassCategory = pClass.ClassCategory1 %}
+                {% set name = 'classcategory_id1' %}
+            {% endif %}
+            {% if pClass.ClassCategory2.color_thumb_hex is defined %}
+                {% set ClassCategory = pClass.ClassCategory2 %}
+                {% set name = 'classcategory_id2' %}
+            {% endif %}
+            {% if ClassCategory %}
+                {% set color = ClassCategory.color_thumb_hex %}
+                {% set label = ClassCategory.name %}
+                {% set value = ClassCategory.id %}
+                <div data-p-class="{{ClassCategory.ClassName.id}}" data-label="{{label}}" data-value="{{ClassCategory.id}}" class="color-thumb" style="background-color: #{{color}}"></div>
+            {% endif %}
+        {% endfor %}
+            <div id="class-cat-config" class="hidden" data-remove-name="{{name}}"></div>
+        </div>
+    <div class="clearfix"></div>
+{% endif %}
+</div>

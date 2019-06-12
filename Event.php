@@ -29,14 +29,21 @@ class Event implements EventSubscriberInterface
         return [
             EccubeEvents::ADMIN_PRODUCT_CLASS_CATEGORY_INDEX_INITIALIZE => 'onShowColorPicker',
             '@admin/Product/class_category.twig' => 'onShowColorPickerRender',
+            'Product/detail.twig' => 'onShowColorThumbnail',
         ];
     }
 
     public function onShowColorPicker(EventArgs $event)
     {
     }
+
     public function onShowColorPickerRender(TemplateEvent $event)
     {
         $event->addSnippet('@ColorThumb/admin/colorpicker.twig');
+    }
+
+    public function onShowColorThumbnail(TemplateEvent $event)
+    {
+        $event->addSnippet('@ColorThumb/default/color_thumbnail.twig');
     }
 }
