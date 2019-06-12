@@ -1,9 +1,9 @@
 <?php
 
-namespace Plugin\TPS\Repository;
+namespace Plugin\ColorThumb\Repository;
 
 use Eccube\Repository\AbstractRepository;
-use Plugin\TPS\Entity\Config;
+use Plugin\ColorThumb\Entity\Config;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

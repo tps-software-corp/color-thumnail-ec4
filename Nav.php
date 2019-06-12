@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugin\TPS;
+namespace Plugin\ColorThumb;
 
 use Eccube\Common\EccubeNav;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Plugin\TPS\Controller\Admin;
+namespace Plugin\ColorThumb\Controller\Admin;
 
 use Eccube\Controller\AbstractController;
-use Plugin\TPS\Form\Type\Admin\ConfigType;
-use Plugin\TPS\Repository\ConfigRepository;
+use Plugin\ColorThumb\Form\Type\Admin\ConfigType;
+use Plugin\ColorThumb\Repository\ConfigRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,8 +27,8 @@ class ConfigController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/tps/config", name="tps_admin_config")
-     * @Template("@TPS/admin/config.twig")
+     * @Route("/%eccube_admin_route%/colorthumb/config", name="colorthumb_admin_config")
+     * @Template("@ColorThumb/admin/config.twig")
      */
     public function index(Request $request)
     {

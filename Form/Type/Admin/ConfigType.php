@@ -1,8 +1,8 @@
 <?php
 
-namespace Plugin\TPS\Form\Type\Admin;
+namespace Plugin\ColorThumb\Form\Type\Admin;
 
-use Plugin\TPS\Entity\Config;
+use Plugin\ColorThumb\Entity\Config;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
