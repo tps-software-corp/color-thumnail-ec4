@@ -1,0 +1,19 @@
+<script src="{{ asset('ColorThumb/assets/js/jscolor.js', 'plugin') }}"></script>
+<script>
+$(function () {
+    $('.colorpicker').each(function() {
+        var id = $(this).data('id');
+        $('#ex-class_category-' + id).find('[type="submit"]').parent().before($(this).html());
+    })
+    jscolor.installByClassName("jscolor");
+});
+</script>
+{% for ClassCategory in ClassCategories %}
+<div class="colorpicker" data-id="{{ClassCategory.id}}">
+    <div class="col-auto align-self-center"><span>{{ 'admin.product.class_category__color_thumb_hex'|trans }}</span></div>
+    <div class="col-auto align-items-center">
+        {{ form_widget(forms[ClassCategory.id].color_thumb_hex, {'attr': {'class': 'jscolor', 'data-origin-value': forms[ClassCategory.id].vars.value.color_thumb_hex}}) }}
+        {{ form_errors(forms[ClassCategory.id].color_thumb_hex) }}
+    </div>
+</div>
+{% endfor %}

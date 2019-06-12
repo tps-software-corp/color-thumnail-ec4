@@ -49,4 +49,5 @@ class ConfigController extends AbstractController
             'form' => $form->createView(),
         ];
     }
+
 }

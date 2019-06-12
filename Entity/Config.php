@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Config
  *
- * @ORM\Table(name="plg_tps_config")
+ * @ORM\Table(name="plg_color_thumb_config")
  * @ORM\Entity(repositoryClass="Plugin\ColorThumb\Repository\ConfigRepository")
  */
 class Config
