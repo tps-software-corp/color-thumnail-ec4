@@ -16,4 +16,9 @@ trait ClassCateogoryTrait
      */
     public $color_thumb_hex;
 
+    public function setColorThumbHex($color_thumb_hex)
+    {
+        $this->color_thumb_hex = $color_thumb_hex;
+        return $this;
+    }
 }

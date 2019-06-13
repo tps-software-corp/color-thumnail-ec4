@@ -29,25 +29,8 @@
     border-bottom: 1px dotted #ccc;
 }
 </style>
-<script>
-$(function() {
-    $('.ec-productRole__actions').prepend($('.color-thumnail').html());
-    var remover = $('#class-cat-config').data('remove-name');
-    $('#' + remover).parent().hide();
-    $('.color-thumb').off('click');
-    $('.color-thumb').on('click', function() {
-        $('.color-thumb').removeClass('active');
-        $(this).addClass('active');
-        $('#color-selected').html($(this).data('label'));
-        $('#' + remover).val($(this).data('value'));
-        $('[name="ProductClass"]').val($(this).data('p-class'));
-    });
-    $('.color-thumb:first-child').trigger('click');
-    $('.color-thumb:first-child').addClass('active');
-})
-</script>
 
-<div class="color-thumnail">
+<div class="color-thumnail hidden">
 {% if Product.stock_find %}
     <div class="c-thumnail">
         <div class="">
@@ -57,11 +40,11 @@ $(function() {
         {% set name = null %}
         {% for pClass in Product.ProductClasses %}
             {% set ClassCategory = null %}
-            {% if pClass.ClassCategory1.color_thumb_hex is defined %}
+            {% if pClass.ClassCategory1.color_thumb_hex is defined and  pClass.ClassCategory1.color_thumb_hex %}
                 {% set ClassCategory = pClass.ClassCategory1 %}
                 {% set name = 'classcategory_id1' %}
             {% endif %}
-            {% if pClass.ClassCategory2.color_thumb_hex is defined %}
+            {% if pClass.ClassCategory2.color_thumb_hex is defined and  pClass.ClassCategory2.color_thumb_hex %}
                 {% set ClassCategory = pClass.ClassCategory2 %}
                 {% set name = 'classcategory_id2' %}
             {% endif %}
@@ -75,5 +58,45 @@ $(function() {
             <div id="class-cat-config" class="hidden" data-remove-name="{{name}}"></div>
         </div>
     <div class="clearfix"></div>
+        <script>
+        $(function() {
+            {% if name %}
+                var current_name = '{{name}}';
+                var other_name = '{{ name == 'classcategory_id2' ? 'classcategory_id1' : 'classcategory_id2' }}';
+                $('.color-thumnail').removeClass('hidden');
+                $('.color-thumnail').prependTo($('.ec-productRole__actions'));
+                {# $('.ec-productRole__actions').prepend($('.color-thumnail').html()); #}
+                var remover = $('#class-cat-config').data('remove-name');
+                $('#' + remover).parent().hide();
+                $('.color-thumb').off('click');
+                $('.color-thumb').on('click', function() {
+                    $('.color-thumb').removeClass('active');
+                    $(this).addClass('active');
+                    $('#color-selected').html($(this).data('label'));
+                    $('#' + remover).val($(this).data('value'));
+                    var pClassId = $(this).data('p-class');
+                    var pClassValue = $(this).data('value');
+                    $('[name="ProductClass"]').val(pClassId);
+                    var other_name_value = $('#' + other_name).val();
+                    if (other_name_value == undefined) {
+                        var chose = eccube.classCategories[pClassValue]['#'];
+                        $('.ec-price__price.price02-default').html(chose.price02_inc_tax)
+                    } else if (other_name_value != '__unselected') {
+                        if (current_name == 'classcategory_id1') {
+                            var chose = eccube.classCategories[pClassValue]['#' + other_name_value];
+                        } else {
+                            var chose = eccube.classCategories[other_name_value]['#' + pClassValue];
+                        }
+                        $('.ec-price__price.price02-default').html(chose.price02_inc_tax)
+                    }
+                });
+                $('#' + other_name).on('change', function() {
+                    $('.color-thumb.active').trigger('click');
+                })
+                $('.color-thumb:first-child').trigger('click');
+                $('.color-thumb:first-child').addClass('active');
+            {% endif %}
+        })
+        </script>
 {% endif %}
 </div>

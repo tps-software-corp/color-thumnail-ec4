@@ -10,6 +10,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Eccube\Entity\ClassName;
+use Plugin\ColorThumb\Entity\ExtendClassName;
 
 /**
  * Class PluginManager.
@@ -28,9 +29,10 @@ class PluginManager extends AbstractPluginManager
      */
     public function install(array $meta, ContainerInterface $container)
     {
+        $configRepository = $container->get('Plugin\ColorThumb\Repository\ConfigRepository');
         $classNameRepository = $container->get('Eccube\Repository\ClassNameRepository');
         $classCategoryRepository = $container->get('Plugin\ColorThumb\Repository\ExtendClassCategoryRepository');
-        $className = new \Eccube\Entity\ClassName();
+        $className = new ExtendClassName();
         $className->setName(self::CLASS_NAME_NAME);
         $className->setBackendName(self::CLASS_NAME_CODE);
         $classNameRepository->save($className);
@@ -84,22 +86,22 @@ class PluginManager extends AbstractPluginManager
      */
     public function uninstall(array $meta, ContainerInterface $container)
     {
-        $classNameRepository = $container->get('Eccube\Repository\ClassNameRepository');
-        $classCategoryRepository = $container->get('Plugin\ColorThumb\Repository\ExtendClassCategoryRepository');
-        $classNames = $classNameRepository->findBy(['backend_name' => self::CLASS_NAME_CODE]);
-        foreach($classNames as $className) {
-            foreach($className->getClassCategories() as $cat) {
-                try {
-                    $classCategoryRepository->delete($cat);
-                } catch (\Exception $ex) {
-                    dump($ex->getMessage());
-                }
-            }
-            try {
-                $classNameRepository->delete($className);
-            } catch (\Exception $ex) {
-                dump($ex->getMessage());
-            }
-        }
+        // $classNameRepository = $container->get('Eccube\Repository\ClassNameRepository');
+        // $classCategoryRepository = $container->get('Plugin\ColorThumb\Repository\ExtendClassCategoryRepository');
+        // $classNames = $classNameRepository->findBy(['backend_name' => self::CLASS_NAME_CODE]);
+        // foreach($classNames as $className) {
+        //     foreach($className->getClassCategories() as $cat) {
+        //         try {
+        //             $classCategoryRepository->delete($cat);
+        //         } catch (\Exception $ex) {
+        //             dump($ex->getMessage());
+        //         }
+        //     }
+        //     try {
+        //         $classNameRepository->delete($className);
+        //     } catch (\Exception $ex) {
+        //         dump($ex->getMessage());
+        //     }
+        // }
     }
 }

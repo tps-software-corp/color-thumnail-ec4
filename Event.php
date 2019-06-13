@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Plugin\ColorThumb\Form\Type\Admin\ExtendClassCategoryType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Plugin\ColorThumb\Repository\ExtendClassCategoryRepository;
+use Plugin\ColorThumb\Entity\ExtendClassCategory;
+use Eccube\Form\Type\Admin\ClassCategoryType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class Event implements EventSubscriberInterface
 {
@@ -35,6 +38,19 @@ class Event implements EventSubscriberInterface
 
     public function onShowColorPicker(EventArgs $event)
     {
+        $TargetClassCategory = $event['TargetClassCategory'];
+        if ($TargetClassCategory->getId()) {
+            $TargetClassCategory = $this->classCategoryRepository->find($event['TargetClassCategory']->getId());
+        } else {
+            $TargetClassCategory = new ExtendClassCategory();
+            $TargetClassCategory->setClassName($event['ClassName']);
+        }
+        $event['TargetClassCategory'] = $TargetClassCategory;
+
+        $event['builder']->add('color_thumb_hex', TextType::class, [
+            'label' => 'classname.label.color_thumb_hex',
+            'required' => false
+        ]);
     }
 
     public function onShowColorPickerRender(TemplateEvent $event)

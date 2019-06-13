@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Plugin\ColorThumb\Entity\ExtendClassCategory as ClassCategory;
-use Plugin\ColorThumb\Form\Type\Admin\ExtendClassCategoryType as ClassCategoryType;
-use Plugin\ColorThumb\Repository\ExtendClassCategoryRepository as classCategoryRepository;
+use Eccube\Entity\ClassCategory;
+use Eccube\Form\Type\Admin\ClassCategoryType;
+use Eccube\Repository\ClassCategoryRepository;
+use Plugin\ColorThumb\Form\Type\Admin\ExtendClassCategoryType;
+use Plugin\ColorThumb\Entity\ExtendClassName;
 
 class ColorThumbClassCategoryController extends AbstractController
 {
@@ -70,9 +72,10 @@ class ColorThumbClassCategoryController extends AbstractController
             $TargetClassCategory = new ClassCategory();
             $TargetClassCategory->setClassName($ClassName);
         }
+        $ClassCategoryTypeClass = ClassCategoryType::class;
 
         $builder = $this->formFactory
-            ->createBuilder(ClassCategoryType::class, $TargetClassCategory);
+            ->createBuilder($ClassCategoryTypeClass, $TargetClassCategory);
 
         $event = new EventArgs(
             [
@@ -84,12 +87,15 @@ class ColorThumbClassCategoryController extends AbstractController
         );
         $this->eventDispatcher->dispatch(EccubeEvents::ADMIN_PRODUCT_CLASS_CATEGORY_INDEX_INITIALIZE, $event);
 
+        if ($ClassName instanceof ExtendClassName) {
+            $ClassCategoryTypeClass = ExtendClassCategoryType::class;
+        }
         $ClassCategories = $this->classCategoryRepository->getList($ClassName);
 
         $forms = [];
         foreach ($ClassCategories as $ClassCategory) {
             $id = $ClassCategory->getId();
-            $forms[$id] = $this->formFactory->createNamed('class_category_'.$id, ClassCategoryType::class, $ClassCategory);
+            $forms[$id] = $this->formFactory->createNamed('class_category_'.$id, $ClassCategoryTypeClass, $ClassCategory);
         }
 
         $form = $builder->getForm();
@@ -98,7 +104,6 @@ class ColorThumbClassCategoryController extends AbstractController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 log_info('規格分類登録開始', [$id]);
-
                 $this->classCategoryRepository->save($TargetClassCategory);
 
                 log_info('規格分類登録完了', [$id]);

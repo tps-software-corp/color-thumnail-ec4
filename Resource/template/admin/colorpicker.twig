@@ -4,6 +4,7 @@ $(function () {
     $('.colorpicker').each(function() {
         var id = $(this).data('id');
         $('#ex-class_category-' + id).find('[type="submit"]').parent().before($(this).html());
+        $(this).remove();
     })
     jscolor.installByClassName("jscolor");
 });
